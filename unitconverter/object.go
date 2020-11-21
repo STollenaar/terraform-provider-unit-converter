@@ -51,13 +51,13 @@ func ObjectSchema() map[string]*schema.Schema {
 }
 
 // FindObjectByName function to find the object in the array and return the index
-func FindObjectByName(what string, array []Object) (idx Object) {
+func FindObjectByName(what string, array []Object) (respone *Object) {
 	for i, v := range array {
 		if strings.EqualFold(what, v.Name) || what == v.NameShort {
-			return array[i]
+			return &array[i]
 		}
 	}
-	return Object{"null", "n", -1}
+	return nil
 }
 
 // ConvertFunc function to convert the data
@@ -70,7 +70,7 @@ func ConvertFunc(Types func() []Object) func(d *schema.ResourceData, meta interf
 		original := FindObjectByName(d.Get("original").(string), Types())
 		wanted := FindObjectByName(d.Get("wanted").(string), Types())
 
-		if original.Name == "null" || wanted.Name == "Name" {
+		if original == nil || wanted == nil {
 			return fmt.Errorf("Unable to find the conversion type. Please make sure you are using the correct resource and type")
 		}
 		output := (original.Unit * input) / wanted.Unit
