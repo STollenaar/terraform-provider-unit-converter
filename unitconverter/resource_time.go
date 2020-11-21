@@ -17,15 +17,17 @@ func ResourceTimeConverter() *schema.Resource {
 }
 
 // GetTimeTypes creating the time types needed for conversion
-func GetTimeTypes() []Object {
-	m := []Object{
-		{"Year", "Y", 1, 52},
-		{"Week", "W", 52, 7},
-		{"Day", "D", 7, 24},
-		{"Hour", "H", 24, 60},
-		{"Minute", "M", 60, 60},
-		{"Second", "S", 60, 1000},
-		{"Milisecond", "Ms", 1000, 1000000},
+func GetTimeTypes() func() []Object {
+	var m []Object
+
+	return func() []Object {
+		m = append(m, Object{"Second", "S", *value})
+		m = append(m, Object{"Miliseconds", "Ms", m[0].Unit * 1000})
+		m = append(m, Object{"Minute", "M", m[0].Unit * 60})
+		m = append(m, Object{"Hour", "H", m[2].Unit * 60})
+		m = append(m, Object{"Day", "D", m[3].Unit * 24})
+		m = append(m, Object{"Week", "W", m[4].Unit * 7})
+		m = append(m, Object{"Year", "Y", m[5].Unit * 52})
+		return m
 	}
-	return m
 }

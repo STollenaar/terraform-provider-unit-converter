@@ -2,16 +2,18 @@ package unitconverter
 
 import (
 	"fmt"
-	"strconv"
+	"math"
 	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
+var value *float64
+
 // Object that is used to build up a conversion type
 type Object struct {
-	Name, NameShort         string
-	StepBigger, StepSmaller int
+	Name, NameShort string
+	Unit            float64
 }
 
 // ReadNil generic function to return nil for the read operation
@@ -36,67 +38,44 @@ func ObjectSchema() map[string]*schema.Schema {
 		},
 		"input": {
 			Description: "The value to convert.",
-			Type:        schema.TypeInt,
+			Type:        schema.TypeFloat,
 			Required:    true,
 			ForceNew:    true,
 		},
 		"output": {
 			Description: "The converted input.",
-			Type:        schema.TypeInt,
+			Type:        schema.TypeFloat,
 			Computed:    true,
 		},
 	}
 }
 
 // FindObjectByName function to find the object in the array and return the index
-func FindObjectByName(what string, array []Object) (idx int) {
+func FindObjectByName(what string, array []Object) (idx Object) {
 	for i, v := range array {
-		if strings.EqualFold(what, v.Name) || strings.EqualFold(what, v.NameShort) {
-			return i
+		if strings.EqualFold(what, v.Name) || what == v.NameShort {
+			return array[i]
 		}
 	}
-	return -1
+	return Object{"null", "n", -1}
 }
 
 // ConvertFunc function to convert the data
-func ConvertFunc(Types []Object) func(d *schema.ResourceData, meta interface{}) error {
+func ConvertFunc(Types func() []Object) func(d *schema.ResourceData, meta interface{}) error {
 	return func(d *schema.ResourceData, meta interface{}) error {
 
 		// Readying the needed variables
-		original := FindObjectByName(d.Get("original").(string), Types)
-		wanted := FindObjectByName(d.Get("wanted").(string), Types)
-		input := d.Get("input").(int)
+		input := d.Get("input").(float64)
+		value = &input
+		original := FindObjectByName(d.Get("original").(string), Types())
+		wanted := FindObjectByName(d.Get("wanted").(string), Types())
 
-		if original == -1 || wanted == -1 {
+		if original.Name == "null" || wanted.Name == "Name" {
 			return fmt.Errorf("Unable to find the conversion type. Please make sure you are using the correct resource and type")
 		}
-
-		// Calculating the total conversion delta
-		mod := 1
-		if original > wanted {
-			mod = -1
-		}
-
-		total := 0
-		for original != wanted {
-			if mod > 0 {
-				total += Types[original].StepSmaller
-			} else {
-				total += Types[original].StepBigger
-			}
-			original += mod
-		}
-
-		// Doing the actual conversion
-		var output int
-		if mod > 0 {
-			output = input * total
-		} else {
-			output = input / total
-		}
-
-		d.Set("output", output)
-		d.SetId(string(strconv.Itoa(output)))
+		output := (original.Unit * input) / wanted.Unit
+		d.Set("output", math.Round(output*1000)/1000)
+		d.SetId(fmt.Sprintf("%.2f", output))
 		return nil
 	}
 }
