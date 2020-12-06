@@ -42,6 +42,13 @@ func ObjectSchema() map[string]*schema.Schema {
 			Required:    true,
 			ForceNew:    true,
 		},
+		"sublist_only": {
+			Description: "An optional value to only use a small sublist",
+			Type:        schema.TypeBool,
+			Optional:    true,
+			Default:     false,
+			ForceNew:    true,
+		},
 		"output": {
 			Description: "The converted input.",
 			Type:        schema.TypeFloat,
@@ -53,7 +60,7 @@ func ObjectSchema() map[string]*schema.Schema {
 // FindObjectByName function to find the object in the array and return the index
 func FindObjectByName(what string, array []Object) (respone *Object) {
 	for i, v := range array {
-		if strings.EqualFold(what, v.Name) || what == v.NameShort {
+		if strings.EqualFold(what, v.Name) || strings.Contains(v.NameShort, what) {
 			return &array[i]
 		}
 	}
@@ -61,14 +68,14 @@ func FindObjectByName(what string, array []Object) (respone *Object) {
 }
 
 // ConvertFunc function to convert the data
-func ConvertFunc(Types func() []Object) func(d *schema.ResourceData, meta interface{}) error {
+func ConvertFunc(Types func(bool) []Object) func(d *schema.ResourceData, meta interface{}) error {
 	return func(d *schema.ResourceData, meta interface{}) error {
 
 		// Readying the needed variables
 		input := d.Get("input").(float64)
 		value = &input
-		original := FindObjectByName(d.Get("original").(string), Types())
-		wanted := FindObjectByName(d.Get("wanted").(string), Types())
+		original := FindObjectByName(d.Get("original").(string), Types(d.Get("sublist_only").(bool)))
+		wanted := FindObjectByName(d.Get("wanted").(string), Types(d.Get("sublist_only").(bool)))
 
 		if original == nil || wanted == nil {
 			return fmt.Errorf("Unable to find the conversion type. Please make sure you are using the correct resource and type")

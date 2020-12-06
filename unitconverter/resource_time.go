@@ -17,10 +17,10 @@ func ResourceTimeConverter() *schema.Resource {
 }
 
 // GetTimeTypes creating the time types needed for conversion
-func GetTimeTypes() func() []Object {
+func GetTimeTypes() func(bool) []Object {
 	var m []Object
 
-	return func() []Object {
+	return func(sublist bool) []Object {
 		m = append(m, Object{"Second", "S", *value})
 		m = append(m, Object{"Miliseconds", "Ms", m[0].Unit / 1000})
 		m = append(m, Object{"Minute", "M", m[0].Unit * 60})
