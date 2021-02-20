@@ -60,7 +60,7 @@ func ObjectSchema() map[string]*schema.Schema {
 // FindObjectByName function to find the object in the array and return the index
 func FindObjectByName(what string, array []Object) (respone *Object) {
 	for i, v := range array {
-		if strings.EqualFold(what, v.Name) || strings.Contains(v.NameShort, what) {
+		if strings.EqualFold(what, v.Name) || v.NameShort == what {
 			return &array[i]
 		}
 	}
@@ -80,9 +80,15 @@ func ConvertFunc(Types func(bool) []Object) func(d *schema.ResourceData, meta in
 		if original == nil || wanted == nil {
 			return fmt.Errorf("Unable to find the conversion type. Please make sure you are using the correct resource and type")
 		}
-		output := (original.Unit * input) / wanted.Unit
-		d.Set("output", math.Round(output*1000)/1000)
+		output := ConvertFuncMath(input, original.Unit, wanted.Unit)
+		d.Set("output", output)
 		d.SetId(fmt.Sprintf("%.2f", output))
 		return nil
 	}
+}
+
+// ConvertFuncMath function to do the actual math
+func ConvertFuncMath(input float64, orginalUnit float64, wantedUnit float64) float64 {
+	output := (orginalUnit * input) / wantedUnit
+	return math.Round(output*1000) / 1000
 }

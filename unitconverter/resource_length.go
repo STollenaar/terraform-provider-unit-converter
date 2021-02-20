@@ -25,7 +25,7 @@ func GetLengthTypes() func(bool) []Object {
 		m = append(m, Object{"Meter", "m", *value})
 		m = append(m, Object{"Decameter", "dam", m[0].Unit * 10})
 		m = append(m, Object{"Hectometer", "hm", m[1].Unit * 10})
-		m = append(m, Object{"Kilometer", "km", m[2].Unit * 100})
+		m = append(m, Object{"Kilometer", "km", m[2].Unit * 10})
 		m = append(m, Object{"Decimeter", "dm", m[0].Unit / 10})
 		m = append(m, Object{"Centimeter", "cm", m[4].Unit / 10})
 		m = append(m, Object{"Millimeter", "mm", m[5].Unit / 10})
