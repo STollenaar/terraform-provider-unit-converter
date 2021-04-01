@@ -1,6 +1,7 @@
 package unitconverter
 
 import (
+	"errors"
 	"fmt"
 	"math"
 	"strings"
@@ -8,12 +9,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-var value *float64
-
 // Object that is used to build up a conversion type
 type Object struct {
-	Name, NameShort string
-	Unit            float64
+	Name      string  `json:"Name"`
+	NameShort string  `json:"NameShort"`
+	Unit      float64 `json:"Unit"`
 }
 
 // ReadNil generic function to return nil for the read operation
@@ -57,27 +57,39 @@ func ObjectSchema() map[string]*schema.Schema {
 	}
 }
 
-// FindObjectByName function to find the object in the array and return the index
-func FindObjectByName(what string, array []Object) (respone *Object) {
+// FindObjectValueByName function to find the object in the array and return the index
+func FindObjectValueByName(what string, array []Object) (*Object, error) {
 	for i, v := range array {
 		if strings.EqualFold(what, v.Name) || v.NameShort == what {
-			return &array[i]
+			return &array[i], nil
 		}
 	}
-	return nil
+	return nil, errors.New("Can't find unit in objects array")
+
+}
+
+// FindObjectIndexByName function to find the object in the array and return the index
+func FindObjectIndexByName(what string, array []Object) (int, error) {
+	for i, v := range array {
+		if strings.EqualFold(what, v.Name) || v.NameShort == what {
+			return i, nil
+		}
+	}
+	return -1, errors.New("Can't find unit in objects array")
+
 }
 
 // ConvertFunc function to convert the data
-func ConvertFunc(Types func(bool) []Object) func(d *schema.ResourceData, meta interface{}) error {
+func ConvertFunc(Types func(float64, bool) []Object) func(d *schema.ResourceData, meta interface{}) error {
 	return func(d *schema.ResourceData, meta interface{}) error {
 
 		// Readying the needed variables
 		input := d.Get("input").(float64)
-		value = &input
-		original := FindObjectByName(d.Get("original").(string), Types(d.Get("sublist_only").(bool)))
-		wanted := FindObjectByName(d.Get("wanted").(string), Types(d.Get("sublist_only").(bool)))
 
-		if original == nil || wanted == nil {
+		original, unitError := FindObjectValueByName(d.Get("original").(string), Types(input, d.Get("sublist_only").(bool)))
+		wanted, unitError := FindObjectValueByName(d.Get("wanted").(string), Types(input, d.Get("sublist_only").(bool)))
+
+		if unitError != nil {
 			return fmt.Errorf("Unable to find the conversion type. Please make sure you are using the correct resource and type")
 		}
 		output := ConvertFuncMath(input, original.Unit, wanted.Unit)

@@ -17,12 +17,13 @@ func ResourceLengthConverter() *schema.Resource {
 }
 
 // GetLengthTypes creating the length types needed for conversion
-func GetLengthTypes() func(bool) []Object {
-	var m []Object
+func GetLengthTypes() func(float64, bool) []Object {
 
-	return func(sublist bool) []Object {
+	return func(value float64, sublist bool) []Object {
+		var m []Object
+
 		// Metric values
-		m = append(m, Object{"Meter", "m", *value})
+		m = append(m, Object{"Meter", "m", value})
 		m = append(m, Object{"Decameter", "dam", m[0].Unit * 10})
 		m = append(m, Object{"Hectometer", "hm", m[1].Unit * 10})
 		m = append(m, Object{"Kilometer", "km", m[2].Unit * 10})

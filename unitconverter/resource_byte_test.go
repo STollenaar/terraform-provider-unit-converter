@@ -6,8 +6,7 @@ import (
 
 func TestByteTypes(t *testing.T) {
 	tmpV := 1.0
-	value = &tmpV
-	types := GetByteTypes()(false)
+	types := GetByteTypes()(tmpV, false)
 	testFindObjectByName(types, t)
 }
 
@@ -16,7 +15,7 @@ func TestByte(t *testing.T) {
 	types := GetByteTypes()
 
 	// Cases to test
-	cases := []TestCases{
+	cases := []TestCasesTypes{
 		{
 			wanted:   "Bit",
 			original: "Byte",

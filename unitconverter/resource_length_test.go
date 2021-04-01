@@ -6,8 +6,7 @@ import (
 
 func TestLengthTypes(t *testing.T) {
 	tmpV := 1.0
-	value = &tmpV
-	types := GetLengthTypes()(false)
+	types := GetLengthTypes()(tmpV, false)
 	testFindObjectByName(types, t)
 }
 
@@ -16,7 +15,7 @@ func TestLength(t *testing.T) {
 	types := GetLengthTypes()
 
 	// Cases to test
-	cases := []TestCases{
+	cases := []TestCasesTypes{
 		{
 			wanted:   "Meter",
 			original: "km",

@@ -11,9 +11,11 @@ var testAccProvider *schema.Provider
 func Provider() *schema.Provider {
 	return &schema.Provider{
 		ResourcesMap: map[string]*schema.Resource{
-			"unitconverter_time":   ResourceTimeConverter(),
-			"unitconverter_length": ResourceLengthConverter(),
-			"unitconverter_byte":   ResourceByteConverter(),
+			"unitconverter_time":      ResourceTimeConverter(),
+			"unitconverter_length":    ResourceLengthConverter(),
+			"unitconverter_byte":      ResourceByteConverter(),
+			"unitconverter_math":      ResourceMath(),
+			"unitconverter_step_down": ResourceMathDownStep(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{},
 	}

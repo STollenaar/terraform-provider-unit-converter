@@ -6,8 +6,7 @@ import (
 
 func TestTimeTypes(t *testing.T) {
 	tmpV := 1.0
-	value = &tmpV
-	types := GetTimeTypes()(false)
+	types := GetTimeTypes()(tmpV, false)
 	testFindObjectByName(types, t)
 }
 
@@ -16,7 +15,7 @@ func TestTime(t *testing.T) {
 	types := GetTimeTypes()
 
 	// Cases to test
-	cases := []TestCases{
+	cases := []TestCasesTypes{
 		{
 			wanted:   "Second",
 			original: "H",

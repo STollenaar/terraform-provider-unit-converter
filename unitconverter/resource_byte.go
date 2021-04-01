@@ -17,16 +17,15 @@ func ResourceByteConverter() *schema.Resource {
 }
 
 // GetByteTypes creating the bit types needed for conversion
-func GetByteTypes() func(bool) []Object {
+func GetByteTypes() func(float64, bool) []Object {
 
-	var m []Object
-
-	return func(sublist bool) []Object {
+	return func(value float64, sublist bool) []Object {
+		var m []Object
 
 		if !sublist {
 
 			// Bits
-			m = append(m, Object{"Bit", "b", *value})
+			m = append(m, Object{"Bit", "b", value})
 			m = append(m, Object{"Kilobit", "Kb", m[len(m)-1].Unit * 1000})
 			m = append(m, Object{"Megabit", "Mb", m[len(m)-1].Unit * 1000})
 			m = append(m, Object{"Gigabit", "Gb", m[len(m)-1].Unit * 1000})
@@ -34,7 +33,7 @@ func GetByteTypes() func(bool) []Object {
 			m = append(m, Object{"Petabit", "Pb", m[len(m)-1].Unit * 1000})
 
 			// BiBit
-			m = append(m, Object{"Kibibit", "Kib", *value * 1024})
+			m = append(m, Object{"Kibibit", "Kib", value * 1024})
 			m = append(m, Object{"Mebibit", "Mib", m[len(m)-1].Unit * 1024})
 			m = append(m, Object{"Gibibit", "Gib", m[len(m)-1].Unit * 1024})
 			m = append(m, Object{"Tebibit", "Tib", m[len(m)-1].Unit * 1024})
@@ -42,7 +41,7 @@ func GetByteTypes() func(bool) []Object {
 		}
 
 		// Bytes
-		m = append(m, Object{"Byte", "B", *value * 8})
+		m = append(m, Object{"Byte", "B", value * 8})
 		m = append(m, Object{"Kilobyte", "KB", m[len(m)-1].Unit * 1000})
 		m = append(m, Object{"Megabyte", "MB", m[len(m)-1].Unit * 1000})
 		m = append(m, Object{"Gigabyte", "GB", m[len(m)-1].Unit * 1000})
