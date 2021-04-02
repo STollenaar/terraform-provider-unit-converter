@@ -23,21 +23,21 @@ func GetLengthTypes() func(float64, bool) []Object {
 		var m []Object
 
 		// Metric values
-		m = append(m, Object{"Meter", "m", value})
-		m = append(m, Object{"Decameter", "dam", m[0].Unit * 10})
-		m = append(m, Object{"Hectometer", "hm", m[1].Unit * 10})
-		m = append(m, Object{"Kilometer", "km", m[2].Unit * 10})
-		m = append(m, Object{"Decimeter", "dm", m[0].Unit / 10})
-		m = append(m, Object{"Centimeter", "cm", m[4].Unit / 10})
-		m = append(m, Object{"Millimeter", "mm", m[5].Unit / 10})
-		m = append(m, Object{"Micrometer", "µm", m[6].Unit / 1000})
-		m = append(m, Object{"Nanometer", "mm", m[7].Unit / 1000})
+		m = append(m, Object{"Nanometer", "mm", value})
+		m = append(m, Object{"Micrometer", "µm", m[len(m)-1].Unit * 1000})
+		m = append(m, Object{"Millimeter", "mm", m[len(m)-1].Unit * 1000})
+		m = append(m, Object{"Centimeter", "cm", m[len(m)-1].Unit * 10})
+		m = append(m, Object{"Decimeter", "dm", m[len(m)-1].Unit * 10})
+		m = append(m, Object{"Meter", "m", m[len(m)-1].Unit * 10})
+		m = append(m, Object{"Decameter", "dam", m[len(m)-1].Unit * 10})
+		m = append(m, Object{"Hectometer", "hm", m[len(m)-1].Unit * 10})
+		m = append(m, Object{"Kilometer", "km", m[len(m)-1].Unit * 10})
 
 		// Imperial values
-		m = append(m, Object{"Inch", "\"\"", m[0].Unit * 0.0254})
-		m = append(m, Object{"Feet", "\"", m[8].Unit * 12})
-		m = append(m, Object{"Yard", "yd", m[9].Unit * 3})
-		m = append(m, Object{"Mile", "mi", m[0].Unit * 1609.344})
+		m = append(m, Object{"Inch", "\"\"", m[5].Unit * 39.37})
+		m = append(m, Object{"Feet", "\"", m[len(m)-1].Unit * 12})
+		m = append(m, Object{"Mile", "mi", m[len(m)-1].Unit * 5280})
+		m = append(m, Object{"Yard", "yd", m[len(m)-1].Unit * 1760})
 		return m
 	}
 }

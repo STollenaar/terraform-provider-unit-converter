@@ -11,6 +11,8 @@ type TestCasesMathDownstep struct {
 
 func TestMathdownstep(t *testing.T) {
 	// Cases to test
+	// TODO add more test cases
+
 	cases := []TestCasesMathDownstep{
 		{
 			startUnit:     "Gigabit",

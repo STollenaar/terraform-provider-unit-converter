@@ -15,6 +15,8 @@ func TestTime(t *testing.T) {
 	types := GetTimeTypes()
 
 	// Cases to test
+	// TODO add more test cases
+
 	cases := []TestCasesTypes{
 		{
 			wanted:   "Second",

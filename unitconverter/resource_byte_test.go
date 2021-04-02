@@ -15,6 +15,8 @@ func TestByte(t *testing.T) {
 	types := GetByteTypes()
 
 	// Cases to test
+	// TODO add more test cases
+
 	cases := []TestCasesTypes{
 		{
 			wanted:   "Bit",

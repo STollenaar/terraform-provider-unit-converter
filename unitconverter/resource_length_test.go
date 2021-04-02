@@ -15,6 +15,9 @@ func TestLength(t *testing.T) {
 	types := GetLengthTypes()
 
 	// Cases to test
+
+	// TODO add more test cases
+
 	cases := []TestCasesTypes{
 		{
 			wanted:   "Meter",
