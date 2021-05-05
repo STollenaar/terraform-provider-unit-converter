@@ -22,12 +22,12 @@ func ResourceMathDownStep() *schema.Resource {
 // StepDown does the step down
 func StepDown() func(d *schema.ResourceData, meta interface{}) error {
 	return func(d *schema.ResourceData, meta interface{}) error {
-		value := d.Get("inputValue").(float64)
-		unit := d.Get("inputUnit").(string)
+		value := d.Get("input_value").(float64)
+		unit := d.Get("input_unit").(string)
 
 		resultValue, resultUnit, errorUnit := doDownstep(value, unit)
-		d.Set("outputValue", resultValue)
-		d.Set("outputUnit", resultUnit)
+		d.Set("output_value", resultValue)
+		d.Set("output_unit", resultUnit)
 		d.SetId(fmt.Sprintf("%.2f", value))
 		return errorUnit
 	}
@@ -68,21 +68,21 @@ func isIntegral(val float64) bool {
 // stepFields the schema used for the math resource
 func stepFields() map[string]*schema.Schema {
 	s := map[string]*schema.Schema{
-		"inputValue": {
+		"input_value": {
 			Type:     schema.TypeFloat,
 			Required: true,
 			ForceNew: true,
 		},
-		"inputUnit": {
+		"input_unit": {
 			Type:     schema.TypeString,
 			Required: true,
 			ForceNew: true,
 		},
-		"outputValue": {
+		"output_value": {
 			Type:     schema.TypeFloat,
 			Computed: true,
 		},
-		"outputUnit": {
+		"output_unit": {
 			Type:     schema.TypeString,
 			Required: true,
 			ForceNew: true,
