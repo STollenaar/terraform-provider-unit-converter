@@ -7,13 +7,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-// ResourceMath do simple math between mutliple resources of the same kind
-func ResourceMath() *schema.Resource {
+// DataMath do simple math between mutliple resources of the same kind
+func DataMath() *schema.Resource {
 	return &schema.Resource{
 		Description:   "The resource `unitconverter_math` does simple mathematical operations between 2 units",
-		Create:        PrepareMath(),
-		Read:          ReadNil,
-		Delete:        schema.RemoveFromState,
+		Create:        nil,
+		Read:          PrepareMath(),
+		Delete:        nil,
 		SchemaVersion: 1,
 		Schema:        mathFields(),
 	}

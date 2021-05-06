@@ -4,13 +4,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-// ResourceByteConverter defined resource for the terraform plugin
-func ResourceByteConverter() *schema.Resource {
+// DataByteConverter defined resource for the terraform plugin
+func DataByteConverter() *schema.Resource {
 	return &schema.Resource{
 		Description:   "The resource `unitconverter_byte` converts from the given byte type to the wanted byte type",
-		Create:        ConvertFunc(GetByteTypes()),
-		Read:          ReadNil,
-		Delete:        schema.RemoveFromState,
+		Create:        nil,
+		Read:          ConvertFunc(GetByteTypes()),
+		Delete:        nil,
 		SchemaVersion: 1,
 		Schema:        ObjectSchema(),
 	}

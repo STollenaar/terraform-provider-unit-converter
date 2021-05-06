@@ -7,13 +7,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-// ResourceMathDownStep do simple math between mutliple resources of the same kind
-func ResourceMathDownStep() *schema.Resource {
+// DataMathDownStep do simple math between mutliple resources of the same kind
+func DataMathDownStep() *schema.Resource {
 	return &schema.Resource{
 		Description:   "The resource `unitconverter_math_downstep` converts the units value to a smaller one until its a whole number",
-		Create:        StepDown(),
-		Read:          ReadNil,
-		Delete:        schema.RemoveFromState,
+		Create:        nil,
+		Read:          StepDown(),
+		Delete:        nil,
 		SchemaVersion: 1,
 		Schema:        stepFields(),
 	}

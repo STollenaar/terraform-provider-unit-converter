@@ -4,13 +4,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-// ResourceLengthConverter defined resource for the terraform plugin
-func ResourceLengthConverter() *schema.Resource {
+// DataLengthConverter defined resource for the terraform plugin
+func DataLengthConverter() *schema.Resource {
 	return &schema.Resource{
 		Description:   "The resource `unitconverter_length` converts from the given length type to the wanted length type",
-		Create:        ConvertFunc(GetLengthTypes()),
-		Read:          ReadNil,
-		Delete:        schema.RemoveFromState,
+		Create:        nil,
+		Read:          ConvertFunc(GetLengthTypes()),
+		Delete:        nil,
 		SchemaVersion: 1,
 		Schema:        ObjectSchema(),
 	}
